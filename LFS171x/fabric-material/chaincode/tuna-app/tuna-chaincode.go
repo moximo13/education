@@ -24,7 +24,7 @@ import (
 	sc "github.com/hyperledger/fabric/protos/peer"
 )
 
-// Define the Smart Contract structure
+
 type SmartContract struct {
 }
 
@@ -211,7 +211,7 @@ func (s *SmartContract) changeTunaHolder(APIstub shim.ChaincodeStubInterface, ar
 	json.Unmarshal(tunaAsBytes, &tuna)
 	// Normally check that the specified argument is a valid holder of tuna
 	// we are skipping this check for this example
-	tuna.Holder = args[1]
+	/* tuna.Holder = args[1]
 
 	tunaAsBytes, _ = json.Marshal(tuna)
 	err := APIstub.PutState(args[0], tunaAsBytes)
@@ -219,7 +219,7 @@ func (s *SmartContract) changeTunaHolder(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(fmt.Sprintf("Failed to change tuna holder: %s", args[0]))
 	}
 
-	return shim.Success(nil)
+	return shim.Success(nil)*/
 }
 
 /*
