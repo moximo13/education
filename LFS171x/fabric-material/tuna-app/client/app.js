@@ -12,9 +12,9 @@ app.controller('appController', function($scope, appFactory){
 	$("#error_holder").hide();
 	$("#error_query").hide();
 	
-	$scope.queryAllTuna = function(){
+	$scope.queryAllPackages = function(){
 
-		appFactory.queryAllTuna(function(data){
+		appFactory.queryAllPackages(function(data){
 			var array = [];
 			for (var i = 0; i < data.length; i++){
 				parseInt(data[i].Key);
@@ -28,11 +28,11 @@ app.controller('appController', function($scope, appFactory){
 		});
 	}
 
-	$scope.queryTuna = function(){
+	$scope.queryPackage = function(){
 
 		var id = $scope.tuna_id;
 
-		appFactory.queryTuna(id, function(data){
+		appFactory.queryPackage(id, function(data){
 			$scope.query_tuna = data;
 
 			if ($scope.query_tuna == "Could not locate tuna"){
@@ -44,9 +44,9 @@ app.controller('appController', function($scope, appFactory){
 		});
 	}
 
-	$scope.recordTuna = function(){
+	$scope.addPackage = function(){
 
-		appFactory.recordTuna($scope.tuna, function(data){
+		appFactory.addPackage($scope.tuna, function(data){
 			$scope.create_tuna = data;
 			$("#success_create").show();
 		});
@@ -73,26 +73,26 @@ app.factory('appFactory', function($http){
 	
 	var factory = {};
 
-    factory.queryAllTuna = function(callback){
+    factory.queryAllPackages = function(callback){
 
-    	$http.get('/get_all_tuna/').success(function(output){
+    	$http.get('/get_all_package/').success(function(output){
 			callback(output)
 		});
 	}
 
-	factory.queryTuna = function(id, callback){
-    	$http.get('/get_tuna/'+id).success(function(output){
+	factory.queryPackage = function(id, callback){
+    	$http.get('/get_package/'+id).success(function(output){
 			callback(output)
 		});
 	}
 
-	factory.recordTuna = function(data, callback){
+	factory.addPackage = function(data, callback){
 
-		data.location = data.longitude + ", "+ data.latitude;
+		// data.location = data.longitude + ", "+ data.latitude;
 
-		var tuna = data.id + "-" + data.location + "-" + data.timestamp + "-" + data.holder + "-" + data.vessel;
+		var tuna = data.id + "-" + data.sender_id + "-" + data.receiver_name + "-" + data.receiver_loca + "-" + data.picture_key;
 
-    	$http.get('/add_tuna/'+tuna).success(function(output){
+    	$http.get('/add_package/'+tuna).success(function(output){
 			callback(output)
 		});
 	}

@@ -19,8 +19,8 @@ var os            = require('os');
 
 module.exports = (function() {
 return{
-	get_all_tuna: function(req, res){
-		console.log("getting all tuna from database: ");
+	get_all_package: function(req, res){
+		console.log("getting all requested packages from database: ");
 
 		var fabric_client = new Fabric_Client();
 
@@ -57,11 +57,12 @@ return{
 		        throw new Error('Failed to get user1.... run registerUser.js');
 		    }
 
-		    // queryAllTuna - requires no arguments , ex: args: [''],
+			// queryAllTuna - requires no arguments , ex: args: [''],
+			// require to read all Tuna
 		    const request = {
 		        chaincodeId: 'tuna-app',
 		        txId: tx_id,
-		        fcn: 'queryAllTuna',
+		        fcn: 'queryAllPackages',
 		        args: ['']
 		    };
 
@@ -84,17 +85,21 @@ return{
 		    console.error('Failed to query successfully :: ' + err);
 		});
 	},
-	add_tuna: function(req, res){
-		console.log("submit recording of a tuna catch: ");
+	add_package: function(req, res){
+		console.log("submit recording of a sending package: ");
 
 		var array = req.params.tuna.split("-");
 		console.log(array);
 
 		var key = array[0]
-		var timestamp = array[2]
-		var location = array[1]
-		var vessel = array[4]
-		var holder = array[3]
+		var sender_id = array[1]
+		var receiver_name = array[2]
+		var receiver_loca = array[3]
+		var picture_key = array[4]
+		/*  var deliverer_id = array[4]
+			var price = array[5]
+			var status = array[6]
+			var code = array[7]*/
 
 
 		var fabric_client = new Fabric_Client();
@@ -142,8 +147,8 @@ return{
 		    const request = {
 		        //targets : --- letting this default to the peers assigned to the channel
 		        chaincodeId: 'tuna-app',
-		        fcn: 'recordTuna',
-		        args: [key, vessel, location, timestamp, holder],
+		        fcn: 'addPackage',
+		        args: [key, sender_id, receiver_name, receiver_loca, picture_key],
 		        chainId: 'mychannel',
 		        txId: tx_id
 		    };
@@ -243,7 +248,7 @@ return{
 		    console.error('Failed to invoke successfully :: ' + err);
 		});
 	},
-	get_tuna: function(req, res){
+	get_package: function(req, res){
 
 		var fabric_client = new Fabric_Client();
 		var key = req.params.id
@@ -285,8 +290,8 @@ return{
 		    const request = {
 		        chaincodeId: 'tuna-app',
 		        txId: tx_id,
-		        fcn: 'queryTuna',
-		        args: [key]
+		        fcn: 'queryPackage',
+		        args: [receiver_loca]
 		    };
 
 		    // send the query proposal to the peer

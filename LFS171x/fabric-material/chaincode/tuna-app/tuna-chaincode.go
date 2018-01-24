@@ -32,10 +32,10 @@ type SmartContract struct {
 Structure tags are used by encoding/json library
 */
 type Tuna struct {
-	Vessel string `json:"vessel"`
-	Timestamp string `json:"timestamp"`
-	Location  string `json:"location"`
-	Holder  string `json:"holder"`
+	SenderID string `json:"sender_id"`
+	ReceiverName string `json:"receiver_name"`
+	ReceiverLocation  string `json:"receiver_loca"`
+	PictureKey  string `json:"picture_key"`
 }
 
 /*
@@ -58,14 +58,14 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	// Retrieve the requested Smart Contract function and arguments
 	function, args := APIstub.GetFunctionAndParameters()
 	// Route to the appropriate handler function to interact with the ledger
-	if function == "queryTuna" {
-		return s.queryTuna(APIstub, args)
+	if function == "queryPackage" {
+		return s.queryPackage(APIstub, args)
 	} else if function == "initLedger" {
 		return s.initLedger(APIstub)
-	} else if function == "recordTuna" {
-		return s.recordTuna(APIstub, args)
-	} else if function == "queryAllTuna" {
-		return s.queryAllTuna(APIstub)
+	} else if function == "addPackage" {
+		return s.addPackage(APIstub, args)
+	} else if function == "queryAllPackages" {
+		return s.queryAllPackages(APIstub)
 	} else if function == "changeTunaHolder" {
 		return s.changeTunaHolder(APIstub, args)
 	}
@@ -78,15 +78,15 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 Used to view the records of one particular tuna
 It takes one argument -- the key for the tuna in question
  */
-func (s *SmartContract) queryTuna(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) queryPackage(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 
-	tunaAsBytes, _ := APIstub.GetState(args[0])
+	tunaAsBytes, _ := APIstub.GetState(args[3]) // args[0] 
 	if tunaAsBytes == nil {
-		return shim.Error("Could not locate tuna")
+		return shim.Error("Could not locate package")
 	}
 	return shim.Success(tunaAsBytes)
 }
@@ -97,16 +97,16 @@ Will add test data (10 tuna catches)to our network
  */
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	tuna := []Tuna{
-		Tuna{Vessel: "923F", Location: "67.0006, -70.5476", Timestamp: "1504054225", Holder: "Miriam"},
-		Tuna{Vessel: "M83T", Location: "91.2395, -49.4594", Timestamp: "1504057825", Holder: "Dave"},
-		Tuna{Vessel: "T012", Location: "58.0148, 59.01391", Timestamp: "1493517025", Holder: "Igor"},
-		Tuna{Vessel: "P490", Location: "-45.0945, 0.7949", Timestamp: "1496105425", Holder: "Amalea"},
-		Tuna{Vessel: "S439", Location: "-107.6043, 19.5003", Timestamp: "1493512301", Holder: "Rafa"},
-		Tuna{Vessel: "J205", Location: "-155.2304, -15.8723", Timestamp: "1494117101", Holder: "Shen"},
-		Tuna{Vessel: "S22L", Location: "103.8842, 22.1277", Timestamp: "1496104301", Holder: "Leila"},
-		Tuna{Vessel: "EI89", Location: "-132.3207, -34.0983", Timestamp: "1485066691", Holder: "Yuan"},
-		Tuna{Vessel: "129R", Location: "153.0054, 12.6429", Timestamp: "1485153091", Holder: "Carlo"},
-		Tuna{Vessel: "49W4", Location: "51.9435, 8.2735", Timestamp: "1487745091", Holder: "Fatima"},
+		Tuna{SenderID: "923F", ReceiverName: "Alex Forkford", ReceiverLocation: "Bangkok", PictureKey: "AS4R"},
+		Tuna{SenderID: "M83T", ReceiverName: "Maria Carry", ReceiverLocation: "Suphan buri", PictureKey: "TY56"},
+		Tuna{SenderID: "T012", ReceiverName: "Kylo Ren", ReceiverLocation: "Bangkok", PictureKey: "78U0"},
+		Tuna{SenderID: "P490", ReceiverName: "Igor Karkaroff", ReceiverLocation: "Suphan buri", PictureKey: "1PKI"},
+		Tuna{SenderID: "S439", ReceiverName: "Han Solo", ReceiverLocation: "Bangkok", PictureKey: "RAF5"},
+		Tuna{SenderID: "J205", ReceiverName: "General Hux", ReceiverLocation: "Bangkok", PictureKey: "SHA1"},
+		Tuna{SenderID: "S22L", ReceiverName: "Lord Vadar", ReceiverLocation: "Bangkok", PictureKey: "LEI9"},
+		Tuna{SenderID: "EI89", ReceiverName: "Timothy Rox", ReceiverLocation: "Suphan buri", PictureKey: "AR51"},
+		Tuna{SenderID: "129R", ReceiverName: "James Potter", ReceiverLocation: "Suphan buri", PictureKey: "CAR7"},
+		Tuna{SenderID: "49W4", ReceiverName: "Justin Timberlake", ReceiverLocation: "Suphanburi", PictureKey: "14YA"},
 	}
 
 	i := 0
@@ -126,13 +126,13 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 Fisherman like Sarah would use to record each of her tuna catches. 
 This method takes in five arguments (attributes to be saved in the ledger). 
  */
-func (s *SmartContract) recordTuna(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) addPackage(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	if len(args) != 5 {
 		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
-	var tuna = Tuna{ Vessel: args[1], Location: args[2], Timestamp: args[3], Holder: args[4] }
+	var tuna = Tuna{ SenderID: args[1], ReceiverName: args[2], ReceiverLocation: args[3], PictureKey: args[4] }
 
 	tunaAsBytes, _ := json.Marshal(tuna)
 	err := APIstub.PutState(args[0], tunaAsBytes)
@@ -148,7 +148,7 @@ func (s *SmartContract) recordTuna(APIstub shim.ChaincodeStubInterface, args []s
 allows for assessing all the records added to the ledger(all tuna catches)
 This method does not take any arguments. Returns JSON string containing results. 
  */
-func (s *SmartContract) queryAllTuna(APIstub shim.ChaincodeStubInterface) sc.Response {
+func (s *SmartContract) queryAllPackages(APIstub shim.ChaincodeStubInterface) sc.Response {
 
 	startKey := "0"
 	endKey := "999"
@@ -186,7 +186,7 @@ func (s *SmartContract) queryAllTuna(APIstub shim.ChaincodeStubInterface) sc.Res
 	}
 	buffer.WriteString("]")
 
-	fmt.Printf("- queryAllTuna:\n%s\n", buffer.String())
+	fmt.Printf("- queryAllPackages:\n%s\n", buffer.String())
 
 	return shim.Success(buffer.Bytes())
 }

@@ -20,10 +20,10 @@ console.log("submit recording of a tuna catch: ");
 var array = req.params.tuna.split("-");
 
 var key = array[0]
-var timestamp = array[2]
-var location = array[1]
-var vessel = array[4]
-var holder = array[3]
+var sender_id = array[1]
+var receiver_name = array[2]
+var receiver_loca = array[3]
+var picture_key = array[4]
 
 
 var fabric_client = new Fabric_Client();
@@ -71,8 +71,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     const request = {
         //targets : --- letting this default to the peers assigned to the channel
         chaincodeId: 'tuna-app',
-        fcn: 'recordTuna',
-        args: [key, vessel, location, timestamp, holder],
+        fcn: 'addPackage',
+        args: [key, sender_id, receiver_name, receiver_loca, picture_key],
         chainId: 'mychannel',
         txId: tx_id
     };
