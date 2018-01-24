@@ -217,9 +217,9 @@ func (s *SmartContract) changeTunaHolder(APIstub shim.ChaincodeStubInterface, ar
 	err := APIstub.PutState(args[0], tunaAsBytes)
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Failed to change tuna holder: %s", args[0]))
-	}
+	}*/
 
-	return shim.Success(nil)*/
+	return shim.Success(nil)
 }
 
 /*
