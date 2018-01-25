@@ -32,7 +32,7 @@ app.controller('appController', function($scope, appFactory){
 
 		var loca = $scope.tuna_id;
 
-		appFactory.queryPackage(id, function(data){
+		appFactory.queryPackage(loca, function(data){
 			$scope.query_tuna = data;
 
 			if ($scope.query_tuna == "Could not locate tuna"){
@@ -80,8 +80,8 @@ app.factory('appFactory', function($http){
 		});
 	}
 
-	factory.queryPackage = function(id, callback){
-    	$http.get('/get_package/'+id).success(function(output){
+	factory.queryPackage = function(loca, callback){
+    	$http.get('/get_package/'+loca).success(function(output){
 			callback(output)
 		});
 	}
