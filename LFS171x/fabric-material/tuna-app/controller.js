@@ -251,7 +251,8 @@ return{
 	get_package: function(req, res){
 
 		var fabric_client = new Fabric_Client();
-		var key = req.params.id
+		var receiver_loca = req.params.id; 
+		//req.params.id
 
 		// setup the fabric network
 		var channel = fabric_client.newChannel('mychannel');
