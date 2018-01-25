@@ -251,7 +251,7 @@ return{
 	get_package: function(req, res){
 
 		var fabric_client = new Fabric_Client();
-		var receiver_loca = req.params.id; 
+		var receiver_loca = req.params.loca; 
 		//req.params.id
 
 		// setup the fabric network

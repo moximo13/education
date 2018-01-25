@@ -30,7 +30,7 @@ app.controller('appController', function($scope, appFactory){
 
 	$scope.queryPackage = function(){
 
-		var id = $scope.tuna_id;
+		var loca = $scope.tuna_id;
 
 		appFactory.queryPackage(id, function(data){
 			$scope.query_tuna = data;

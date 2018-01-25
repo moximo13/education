@@ -15,7 +15,7 @@ var os = require('os');
 
 var fabric_client = new Fabric_Client();
 
-var receiver_loca = req.params.id;
+var receiver_loca = req.params.loca;
 
 // setup the fabric network
 var channel = fabric_client.newChannel('mychannel');

@@ -4,7 +4,7 @@ var tuna = require('./controller.js');
 
 module.exports = function(app){
 
-  app.get('/get_package/:id', function(req, res){
+  app.get('/get_package/:loca', function(req, res){
     tuna.get_package(req, res);
   });
   app.get('/add_package/:tuna', function(req, res){
