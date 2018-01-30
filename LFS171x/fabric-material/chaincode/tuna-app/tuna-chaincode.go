@@ -83,9 +83,9 @@ func (s *SmartContract) queryPackage(APIstub shim.ChaincodeStubInterface, args [
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
-
-	tunaAsBytes, _ := APIstub.GetStringArgs(args[3]) // args[0], GetState
-	fmt.Println(args)
+	// tunaAsBytes, _ := APIstub.GetState(args[0])
+	tunaAsBytes := APIstub.GetStringArgs(args[3]) // args[0], GetState
+	fmt.Println("%v", args)
 	if tunaAsBytes == nil {
 		return shim.Error("Could not locate package")
 	}
