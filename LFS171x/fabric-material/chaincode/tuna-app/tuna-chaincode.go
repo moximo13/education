@@ -85,7 +85,7 @@ func (s *SmartContract) queryPackage(APIstub shim.ChaincodeStubInterface, args [
 	}
 	// tunaAsBytes, _ := APIstub.GetState(args[0])
 	tunaAsBytes, _ := APIstub.GetState(args[0]) // args[0], GetState
-	fmt.Println("%v", tunaAsBytes)
+	// fmt.Println("%v", tunaAsBytes)
 	if tunaAsBytes == nil {
 		return shim.Error("Could not locate package")
 	}
